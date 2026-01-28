@@ -6,18 +6,18 @@ import { Question } from "@/models/Question";
 import { QuestionOption } from "@/models/QuestionOption";
 
 type RouteContext = {
-  params: { id: string };
+  params: { questionnaireId: string };
 };
 
-// GET /api/admin/questionnaires/:id
+// GET /api/admin/questionnaires/:questionnaireId
 // Returns questionnaire with its questions and options
 export async function GET(_req: NextRequest, context: RouteContext) {
   try {
     await connectMongo();
 
-    const { id } = context.params;
+    const { questionnaireId } = context.params;
 
-    const questionnaire = await Questionnaire.findById(id).lean();
+    const questionnaire = await Questionnaire.findById(questionnaireId).lean();
     if (!questionnaire) {
       return NextResponse.json({ error: "Not found" }, { status: 404 });
     }
@@ -60,7 +60,7 @@ export async function GET(_req: NextRequest, context: RouteContext) {
       questions: questionsWithOptions,
     });
   } catch (error) {
-    console.error("GET /api/admin/questionnaires/:id error:", error);
+    console.error("GET /api/admin/questionnaires/:questionnaireId error:", error);
     return NextResponse.json(
       { error: "Failed to load questionnaire" },
       { status: 500 }
@@ -68,12 +68,12 @@ export async function GET(_req: NextRequest, context: RouteContext) {
   }
 }
 
-// PATCH /api/admin/questionnaires/:id
+// PATCH /api/admin/questionnaires/:questionnaireId
 export async function PATCH(req: NextRequest, context: RouteContext) {
   try {
     await connectMongo();
 
-    const { id } = context.params;
+    const { questionnaireId } = context.params;
     const body = await req.json();
 
     const updatable: Record<string, unknown> = {};
@@ -89,7 +89,7 @@ export async function PATCH(req: NextRequest, context: RouteContext) {
     }
 
     const updated = await Questionnaire.findByIdAndUpdate(
-      id,
+      questionnaireId,
       { $set: updatable },
       { new: true }
     ).lean();
@@ -100,7 +100,10 @@ export async function PATCH(req: NextRequest, context: RouteContext) {
 
     return NextResponse.json(updated);
   } catch (error) {
-    console.error("PATCH /api/admin/questionnaires/:id error:", error);
+    console.error(
+      "PATCH /api/admin/questionnaires/:questionnaireId error:",
+      error
+    );
     return NextResponse.json(
       { error: "Failed to update questionnaire" },
       { status: 500 }
