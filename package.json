@@ -9,8 +9,9 @@
     "lint": "eslint"
   },
   "dependencies": {
-    "mongoose": "^8.18.2",
+    "mongoose": "^8.22.0",
     "next": "16.1.6",
+    "pg": "^8.13.1",
     "react": "19.2.3",
     "react-dom": "19.2.3"
   },
