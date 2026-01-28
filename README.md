@@ -18,6 +18,14 @@ Open [http://localhost:3000](http://localhost:3000) with your browser to see the
 
 You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
 
+## MongoDB (local)
+
+This project is set up for a local MongoDB using Mongoose.
+
+- **Env**: copy `env.example` to `.env.local` and set `MONGODB_URI` (default local is `mongodb://127.0.0.1:27017/dpdp`)
+- **Connection helper**: `lib/mongoose.ts`
+- **Schemas/models**: `models/*`
+
 This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
 
 ## Learn More
