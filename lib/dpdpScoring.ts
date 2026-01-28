@@ -1,4 +1,4 @@
-import { dpdpQuestions, type OptionLabel } from "../data/dpdpQuestions";
+import type { OptionLabel, Question } from "../data/dpdpQuestions";
 import type {
   Answer,
   FinalResult,
@@ -17,7 +17,6 @@ const OPTION_SCORE_MAP: Record<OptionLabel, number> = {
 };
 
 export const MAX_TOTAL_SCORE = 45;
-export const TOTAL_QUESTIONS = 15;
 export const TOTAL_SECTIONS = 6;
 
 export function optionToScore(option: OptionLabel): number {
@@ -38,8 +37,11 @@ export function mapScoreToRiskLevel(score: number): RiskLevel {
 
 export type RawAnswerMap = Record<string, OptionLabel>;
 
-export function normalizeAnswers(raw: RawAnswerMap): Answer[] {
-  return dpdpQuestions.map((question) => {
+export function normalizeAnswers(
+  raw: RawAnswerMap,
+  questions: Question[]
+): Answer[] {
+  return questions.map((question) => {
     const selectedOption = raw[question.id];
     if (
       !selectedOption ||
@@ -59,11 +61,14 @@ export function normalizeAnswers(raw: RawAnswerMap): Answer[] {
   });
 }
 
-export function calculateSectionScores(answers: Answer[]): SectionScore[] {
+export function calculateSectionScores(
+  answers: Answer[],
+  questions: Question[]
+): SectionScore[] {
   const sectionMap = new Map<string, { obtained: number; max: number; count: number }>();
 
   answers.forEach((answer) => {
-    const question = dpdpQuestions.find((q) => q.id === answer.questionId);
+    const question = questions.find((q) => q.id === answer.questionId);
     if (!question) return;
 
     const maxForQuestion = Math.max(...question.options.map((o) => o.score));
@@ -93,14 +98,17 @@ export function calculateSectionScores(answers: Answer[]): SectionScore[] {
   return sections;
 }
 
-export function computeFinalResult(rawAnswers: RawAnswerMap): FinalResult {
+export function computeFinalResult(
+  rawAnswers: RawAnswerMap,
+  questions: Question[]
+): FinalResult {
   // Validate completeness
   const answeredIds = Object.keys(rawAnswers);
-  if (answeredIds.length !== TOTAL_QUESTIONS) {
+  if (answeredIds.length !== questions.length) {
     throw new Error("Incomplete answers: all questions must be answered.");
   }
 
-  const answers = normalizeAnswers(rawAnswers);
+  const answers = normalizeAnswers(rawAnswers, questions);
 
   // Validate score ranges
   answers.forEach((answer) => {
@@ -114,7 +122,7 @@ export function computeFinalResult(rawAnswers: RawAnswerMap): FinalResult {
     0
   );
 
-  const sectionBreakdown = calculateSectionScores(answers);
+  const sectionBreakdown = calculateSectionScores(answers, questions);
 
   const riskLevel = mapScoreToRiskLevel(totalScore);
 

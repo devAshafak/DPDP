@@ -6,7 +6,7 @@ import { Question } from "@/models/Question";
 import { QuestionOption } from "@/models/QuestionOption";
 
 type RouteContext = {
-  params: { code: string };
+  params: Promise<{ code: string }>;
 };
 
 // GET /api/public/questionnaires/:code
@@ -16,7 +16,7 @@ export async function GET(_req: NextRequest, context: RouteContext) {
   try {
     await connectMongo();
 
-    const { code } = context.params;
+    const { code } = await context.params;
 
     const questionnaire = await Questionnaire.findOne({
       code,

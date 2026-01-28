@@ -9,12 +9,14 @@ import { dpdpQuestions, type OptionLabel } from "../../../data/dpdpQuestions";
 import {
   computeFinalResult,
   type RawAnswerMap,
+  optionToScore,
 } from "../../../lib/dpdpScoring";
 
 const ANSWERS_KEY = "dpdp-assessment-answers";
 const INDEX_KEY = "dpdp-assessment-current-index";
 const RESULT_KEY = "dpdp-assessment-result";
 const DETAILS_KEY = "dpdp-assessment-details";
+const USER_ID_KEY = "dpdp-user-id";
 
 export default function AssessmentQuestionsPage() {
   const router = useRouter();
@@ -23,12 +25,28 @@ export default function AssessmentQuestionsPage() {
   const [sectionTransitionMessage, setSectionTransitionMessage] = useState<
     string | null
   >(null);
+  const [userId, setUserId] = useState<string | null>(null);
 
-  const totalQuestions = dpdpQuestions.length;
-  const currentQuestion = dpdpQuestions[currentIndex];
-  const answeredCount = useMemo(() => Object.keys(answers).length, [answers]);
+  const questions = dpdpQuestions;
+  const totalQuestions = questions.length;
+  const currentQuestion = questions[currentIndex];
+  const answeredCount = useMemo(
+    () => Object.keys(answers).length,
+    [answers]
+  );
 
-  // Initial load from sessionStorage
+  // Ensure a stable anonymous user id for answer storage
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    let id = window.sessionStorage.getItem(USER_ID_KEY);
+    if (!id) {
+      id = crypto.randomUUID();
+      window.sessionStorage.setItem(USER_ID_KEY, id);
+    }
+    setUserId(id);
+  }, []);
+
+  // Initial load from sessionStorage for answers and index
   useEffect(() => {
     if (typeof window === "undefined") return;
 
@@ -46,7 +64,11 @@ export default function AssessmentQuestionsPage() {
 
     if (storedIndexRaw) {
       const parsedIndex = Number(storedIndexRaw);
-      if (!Number.isNaN(parsedIndex) && parsedIndex >= 0 && parsedIndex < totalQuestions) {
+      if (
+        !Number.isNaN(parsedIndex) &&
+        parsedIndex >= 0 &&
+        parsedIndex < totalQuestions
+      ) {
         setCurrentIndex(parsedIndex);
       }
     }
@@ -65,6 +87,8 @@ export default function AssessmentQuestionsPage() {
       window.scrollTo({ top: 0, behavior: "smooth" });
     }
 
+    if (!currentQuestion) return;
+
     if (currentIndex === 0) {
       setSectionTransitionMessage(
         `Now entering: ${currentQuestion.sectionTitle}`
@@ -72,7 +96,7 @@ export default function AssessmentQuestionsPage() {
       return;
     }
 
-    const previousQuestion = dpdpQuestions[currentIndex - 1];
+    const previousQuestion = questions[currentIndex - 1];
     if (previousQuestion.sectionId !== currentQuestion.sectionId) {
       setSectionTransitionMessage(
         `Now entering: ${currentQuestion.sectionTitle}`
@@ -80,9 +104,10 @@ export default function AssessmentQuestionsPage() {
     } else {
       setSectionTransitionMessage(null);
     }
-  }, [currentIndex, currentQuestion.sectionTitle, currentQuestion.sectionId]);
+  }, [currentIndex, currentQuestion, questions]);
 
   const handleSelectOption = (label: OptionLabel) => {
+    if (!currentQuestion) return;
     setAnswers((prev) => ({
       ...prev,
       [currentQuestion.id]: label,
@@ -90,16 +115,51 @@ export default function AssessmentQuestionsPage() {
   };
 
   const canGoBack = currentIndex > 0;
-  const selectedForCurrent = answers[currentQuestion?.id] ?? null;
+  const selectedForCurrent =
+    currentQuestion && answers[currentQuestion.id]
+      ? answers[currentQuestion.id]
+      : null;
   const canGoNext = Boolean(selectedForCurrent);
-  const isLastQuestion = currentIndex === totalQuestions - 1;
+  const isLastQuestion =
+    totalQuestions > 0 && currentIndex === totalQuestions - 1;
 
-  const handleNext = () => {
+  const handleNext = async () => {
     if (!canGoNext) return;
 
     if (isLastQuestion) {
       try {
-        const result = computeFinalResult(answers);
+        // Persist answers to backend using userId and questionId
+        const effectiveUserId =
+          userId ?? (typeof window !== "undefined"
+            ? window.sessionStorage.getItem(USER_ID_KEY) ?? crypto.randomUUID()
+            : "anonymous");
+
+        if (!userId && typeof window !== "undefined") {
+          window.sessionStorage.setItem(USER_ID_KEY, effectiveUserId);
+          setUserId(effectiveUserId);
+        }
+
+        try {
+          await fetch("/api/answers/bulk", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              userId: effectiveUserId,
+              answers: Object.entries(answers).map(
+                ([questionId, selectedOption]) => ({
+                  questionId,
+                  selectedOption,
+                  score: optionToScore(selectedOption),
+                })
+              ),
+            }),
+          });
+        } catch (error) {
+          console.error("Failed to persist answers", error);
+          // Do not block navigation on analytics failure
+        }
+
+        const result = computeFinalResult(answers, questions);
         if (typeof window !== "undefined") {
           window.sessionStorage.setItem(RESULT_KEY, JSON.stringify(result));
           // Clear any previous details so the form is shown fresh for this run.
@@ -121,10 +181,12 @@ export default function AssessmentQuestionsPage() {
     setCurrentIndex((prev) => Math.max(prev - 1, 0));
   };
 
-  const stepLabel = `${currentQuestion.sectionTitle.replace(
-    "Section ",
-    "Section "
-  )} · Question ${currentIndex + 1} of ${totalQuestions}`;
+  const stepLabel =
+    currentQuestion && totalQuestions > 0
+      ? `${currentQuestion.sectionTitle} · Question ${
+          currentIndex + 1
+        } of ${totalQuestions}`
+      : "Loading questions...";
 
   return (
     <main className="min-h-screen bg-[#FAF7F2] text-gray-900">
@@ -147,12 +209,14 @@ export default function AssessmentQuestionsPage() {
       </header>
 
       {/* Question area */}
-      <QuestionCard
-        question={currentQuestion}
-        selectedOption={selectedForCurrent}
-        onSelectOption={handleSelectOption}
-        sectionTransitionMessage={sectionTransitionMessage}
-      />
+      {currentQuestion && (
+        <QuestionCard
+          question={currentQuestion}
+          selectedOption={selectedForCurrent}
+          onSelectOption={handleSelectOption}
+          sectionTransitionMessage={sectionTransitionMessage}
+        />
+      )}
 
       {/* Navigation controls */}
       <NavigationControls

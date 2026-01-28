@@ -2,7 +2,6 @@
 
 import { useEffect } from "react";
 import { useRouter } from "next/navigation";
-import CTAHeader from "../../../components/CTAHeader";
 import TrustNotice from "../../../components/TrustNotice";
 import AssessmentDetailsForm, {
   type AssessmentDetailsPayload,
@@ -10,6 +9,7 @@ import AssessmentDetailsForm, {
 
 const RESULT_KEY = "dpdp-assessment-result";
 const DETAILS_KEY = "dpdp-assessment-details";
+const USER_ID_KEY = "dpdp-user-id";
 
 export default function AssessmentDetailsPage() {
   const router = useRouter();
@@ -32,8 +32,16 @@ export default function AssessmentDetailsPage() {
     }
   }, [router]);
 
-  const handleComplete = (payload: AssessmentDetailsPayload) => {
+  const handleComplete = async (payload: AssessmentDetailsPayload) => {
+    let userId: string | null = null;
+
     if (typeof window !== "undefined") {
+      userId = window.sessionStorage.getItem(USER_ID_KEY);
+      if (!userId) {
+        userId = crypto.randomUUID();
+        window.sessionStorage.setItem(USER_ID_KEY, userId);
+      }
+
       const record = {
         name: payload.name.trim(),
         email: payload.email.trim(),
@@ -41,6 +49,24 @@ export default function AssessmentDetailsPage() {
         completedAt: Date.now(),
       };
       window.sessionStorage.setItem(DETAILS_KEY, JSON.stringify(record));
+    }
+
+    if (userId) {
+      try {
+        await fetch("/api/assessment/details", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            userId,
+            fullName: payload.name.trim(),
+            workEmail: payload.email.trim(),
+            organizationType: payload.organizationType,
+          }),
+        });
+      } catch (error) {
+        console.error("Failed to persist assessment details", error);
+        // Do not block navigation if persistence fails
+      }
     }
 
     router.push("/assessment/result");

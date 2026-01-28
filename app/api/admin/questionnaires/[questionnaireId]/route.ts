@@ -6,7 +6,7 @@ import { Question } from "@/models/Question";
 import { QuestionOption } from "@/models/QuestionOption";
 
 type RouteContext = {
-  params: { questionnaireId: string };
+  params: Promise<{ questionnaireId: string }>;
 };
 
 // GET /api/admin/questionnaires/:questionnaireId
@@ -15,7 +15,7 @@ export async function GET(_req: NextRequest, context: RouteContext) {
   try {
     await connectMongo();
 
-    const { questionnaireId } = context.params;
+    const { questionnaireId } = await context.params;
 
     const questionnaire = await Questionnaire.findById(questionnaireId).lean();
     if (!questionnaire) {
@@ -76,7 +76,7 @@ export async function PATCH(req: NextRequest, context: RouteContext) {
   try {
     await connectMongo();
 
-    const { questionnaireId } = context.params;
+    const { questionnaireId } = await context.params;
     const body = await req.json();
 
     const updatable: Record<string, unknown> = {};

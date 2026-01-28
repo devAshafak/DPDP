@@ -1,4 +1,4 @@
-import mongoose, { Schema, Types } from "mongoose";
+import mongoose, { Schema } from "mongoose";
 
 export type OrganizationType =
   | "Startup"
@@ -9,7 +9,7 @@ export type OrganizationType =
   | "Other";
 
 export type AssessmentUserDetailsDoc = {
-  sessionId: Types.ObjectId;
+  userId: string;
   fullName: string;
   workEmail: string;
   organizationType: OrganizationType;
@@ -19,9 +19,8 @@ export type AssessmentUserDetailsDoc = {
 
 const AssessmentUserDetailsSchema = new Schema<AssessmentUserDetailsDoc>(
   {
-    sessionId: {
-      type: Schema.Types.ObjectId,
-      ref: "AssessmentSession",
+    userId: {
+      type: String,
       required: true,
       index: true,
       unique: true,
@@ -74,4 +73,3 @@ export const AssessmentUserDetails =
     "AssessmentUserDetails",
     AssessmentUserDetailsSchema
   );
-

@@ -7,6 +7,7 @@ import Link from "next/link";
 
 const RESULT_KEY = "dpdp-assessment-result";
 const DETAILS_KEY = "dpdp-assessment-details";
+const USER_ID_KEY = "dpdp-user-id";
 
 export default function AssessmentResultPage() {
   const router = useRouter();
@@ -27,6 +28,18 @@ export default function AssessmentResultPage() {
       try {
         const parsed: FinalResult = JSON.parse(storedResult);
         setResult(parsed);
+
+        const userId = window.sessionStorage.getItem(USER_ID_KEY);
+        if (userId) {
+          // Fire-and-forget persistence of result
+          fetch("/api/assessment/result", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ userId, result: parsed }),
+          }).catch((error) =>
+            console.error("Failed to persist assessment result", error)
+          );
+        }
       } catch {
         // ignore parse errors
       }
