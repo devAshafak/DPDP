@@ -14,15 +14,15 @@ export default function ProgressBar({
   return (
     <section
       aria-label="Assessment progress"
-      className="border-b border-blue-100 bg-[#FAF7F2] px-4 py-3 sm:px-6"
+      className="border-b border-white/10 px-4 py-3 sm:px-6"
     >
       <div className="mx-auto max-w-4xl">
-        <p className="text-xs font-medium text-gray-700">
+        <p className="text-xs font-medium text-white/90">
           Progress: {percent}% completed
         </p>
-        <div className="mt-2 h-2 w-full overflow-hidden rounded-full bg-slate-200/80">
+        <div className="mt-2 h-2 w-full overflow-hidden rounded-full bg-white/20">
           <div
-            className="h-full rounded-full bg-[#4A90E2] transition-all duration-300 ease-out"
+            className="h-full rounded-full bg-[#1fc9f2] transition-all duration-300 ease-out"
             style={{ width: `${percent}%` }}
             aria-hidden="true"
           />

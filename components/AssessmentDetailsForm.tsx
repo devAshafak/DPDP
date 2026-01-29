@@ -173,12 +173,13 @@ export default function AssessmentDetailsForm({
           htmlFor="organizationName"
           className="block text-xs font-medium text-gray-700"
         >
-          Organization Name <span className="font-normal text-gray-400">(optional)</span>
+          Organization Name <span className="text-red-500">*</span>
         </label>
         <input
           id="organizationName"
           name="organizationName"
           type="text"
+          required
           placeholder="e.g. Acme Corporation"
           value={values.organizationName || ""}
           onChange={(e) => handleChange("organizationName", e.target.value)}
@@ -241,7 +242,7 @@ export default function AssessmentDetailsForm({
       <button
         type="submit"
         disabled={!formIsValid || isSubmitting}
-        className="inline-flex w-full items-center justify-center rounded-full bg-[#6BA6E9] px-5 py-2.5 text-sm font-semibold text-white shadow-sm transition-colors hover:bg-[#4A90E2] disabled:cursor-not-allowed disabled:opacity-60 sm:w-auto"
+        className="btn-primary inline-flex w-full items-center justify-center px-5 py-2.5 text-sm text-white transition-colors hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-60 sm:w-auto"
       >
         View My Assessment Result
       </button>

@@ -5,7 +5,7 @@ import TrustBox from "../../../components/TrustBox";
 
 export default function DpdpAwsScannerPage() {
   return (
-    <main className="min-h-screen bg-[#FAF7F2] px-6 py-10 text-gray-900 sm:py-12">
+    <main className="main-bg min-h-screen px-6 py-10 text-white sm:py-12">
       <div className="mx-auto max-w-3xl">
         <CTAHeader
           title="DPDP AWS Scanner"
@@ -44,7 +44,7 @@ export default function DpdpAwsScannerPage() {
           <div className="mt-6 space-y-3">
             <button
               type="button"
-              className="inline-flex w-full items-center justify-center rounded-full bg-[#6BA6E9] px-5 py-2.5 text-sm font-semibold text-white shadow-sm transition-colors hover:bg-[#4A90E2] sm:w-auto"
+              className="btn-primary inline-flex w-full items-center justify-center px-5 py-2.5 text-sm text-white transition-colors hover:opacity-90 sm:w-auto"
             >
               Run DPDP AWS Scanner
             </button>
