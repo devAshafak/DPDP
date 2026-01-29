@@ -6,6 +6,7 @@ import TrustNotice from "../../../components/TrustNotice";
 import AssessmentDetailsForm, {
   type AssessmentDetailsPayload,
 } from "../../../components/AssessmentDetailsForm";
+import { generateUUID } from "../../../lib/uuid";
 
 const RESULT_KEY = "dpdp-assessment-result";
 const DETAILS_KEY = "dpdp-assessment-details";
@@ -38,7 +39,7 @@ export default function AssessmentDetailsPage() {
     if (typeof window !== "undefined") {
       userId = window.sessionStorage.getItem(USER_ID_KEY);
       if (!userId) {
-        userId = crypto.randomUUID();
+        userId = generateUUID();
         window.sessionStorage.setItem(USER_ID_KEY, userId);
       }
 

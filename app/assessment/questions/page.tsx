@@ -11,6 +11,7 @@ import {
   type RawAnswerMap,
   optionToScore,
 } from "../../../lib/dpdpScoring";
+import { generateUUID } from "../../../lib/uuid";
 
 const ANSWERS_KEY = "dpdp-assessment-answers";
 const INDEX_KEY = "dpdp-assessment-current-index";
@@ -40,7 +41,7 @@ export default function AssessmentQuestionsPage() {
     if (typeof window === "undefined") return;
     let id = window.sessionStorage.getItem(USER_ID_KEY);
     if (!id) {
-      id = crypto.randomUUID();
+      id = generateUUID();
       window.sessionStorage.setItem(USER_ID_KEY, id);
     }
     setUserId(id);
@@ -131,7 +132,7 @@ export default function AssessmentQuestionsPage() {
         // Persist answers to backend using userId and questionId
         const effectiveUserId =
           userId ?? (typeof window !== "undefined"
-            ? window.sessionStorage.getItem(USER_ID_KEY) ?? crypto.randomUUID()
+            ? window.sessionStorage.getItem(USER_ID_KEY) ?? generateUUID()
             : "anonymous");
 
         if (!userId && typeof window !== "undefined") {
