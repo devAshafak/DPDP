@@ -6,7 +6,7 @@ import TrustBox from "../../../components/TrustBox";
 
 export default function DpdpStarterGuidePage() {
   return (
-    <main className="min-h-screen bg-[#FAF7F2] px-6 py-10 text-gray-900 sm:py-12">
+    <main className="main-bg min-h-screen px-6 py-10 text-white sm:py-12">
       <div className="mx-auto max-w-3xl">
         <CTAHeader
           title="Free DPDP Starter Guide"

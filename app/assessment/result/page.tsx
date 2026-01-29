@@ -59,20 +59,31 @@ export default function AssessmentResultPage() {
   };
 
   return (
-    <main className="min-h-screen bg-[#FAF7F2] px-6 py-10 text-gray-900 sm:py-12">
-      <div className="mx-auto max-w-3xl">
-        <header className="border-b border-slate-200 pb-4 text-center">
-          <p className="text-xs font-semibold uppercase tracking-wide text-blue-700">
-            DPDP Readiness Assessment
-          </p>
-          <h1 className="mt-2 text-2xl font-semibold text-gray-900">
-            Assessment Result
-          </h1>
-          <p className="mt-2 text-sm text-gray-600">
-            This score reflects your organization&apos;s{" "}
-            <span className="font-medium">readiness posture</span> based on your
-            responses.
-          </p>
+    <main className="start-page-bg min-h-screen px-4 py-6 text-white sm:px-6 sm:py-10 md:py-12">
+      <div className="relative mx-auto flex max-w-3xl flex-col justify-center">
+        <header className="flex flex-col gap-4 pt-2 sm:flex-row sm:items-start sm:justify-between sm:gap-6 sm:pt-0 sm:border-b sm:border-white/10 sm:pb-4">
+          <div className="flex items-center justify-center gap-2 sm:justify-start">
+            <img
+              src="/entersoftLogo.png"
+              alt="Entersoft"
+              className="h-8 w-auto sm:h-9 md:h-10"
+              width={120}
+              height={40}
+            />
+          </div>
+          <div className="flex-1 text-center sm:text-right border-b border-white/10 pb-4 sm:border-b-0 sm:pb-0">
+            <p className="text-xs font-semibold uppercase tracking-wide text-white">
+              DPDP Readiness Assessment
+            </p>
+            <h1 className="mt-2 text-xl font-semibold text-white sm:text-2xl md:text-3xl">
+              Assessment Result
+            </h1>
+            <p className="mt-2 text-sm text-white/90">
+              This score reflects your organization&apos;s{" "}
+              <span className="font-medium">readiness posture</span> based on your
+              responses.
+            </p>
+          </div>
         </header>
 
         <section className="mt-6 rounded-2xl bg-white p-6 shadow-sm ring-1 ring-slate-100 sm:p-7">
@@ -104,7 +115,7 @@ export default function AssessmentResultPage() {
                 <button
                   type="button"
                   onClick={handleRetake}
-                  className="inline-flex items-center justify-center rounded-full border border-slate-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 shadow-sm transition-colors hover:bg-slate-50"
+                  className="btn-primary inline-flex items-center justify-center px-4 py-2 text-sm text-white transition-colors hover:opacity-90"
                 >
                   Start again
                 </button>
@@ -228,7 +239,7 @@ export default function AssessmentResultPage() {
               <button
                 type="button"
                 onClick={handleRetake}
-                className="inline-flex items-center justify-center rounded-full bg-[#6BA6E9] px-4 py-2 text-sm font-semibold text-white shadow-sm transition-colors hover:bg-[#4A90E2]"
+                className="btn-primary inline-flex items-center justify-center px-4 py-2 text-sm text-white transition-colors hover:opacity-90"
               >
                 Start assessment
               </button>

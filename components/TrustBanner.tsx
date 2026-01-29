@@ -24,13 +24,13 @@ export default function TrustBanner() {
   return (
     <section
       aria-label="Assessment trust and assurance information"
-      className="mt-8 rounded-xl border border-blue-100 bg-[#F6F2EA] px-4 py-3 sm:px-6 sm:py-4"
+      className="mt-5 rounded-xl border border-slate-200 bg-white/95 px-3 py-3 shadow-md backdrop-blur-sm sm:mt-8 sm:px-6 sm:py-4 sm:bg-slate-100/95"
     >
-      <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
+      <div className="flex flex-col gap-2 sm:flex-row sm:items-start sm:justify-between sm:gap-3">
         {items.map((item) => (
           <div
             key={item.label}
-            className="flex items-start gap-2 text-sm text-gray-700"
+            className="flex items-start gap-2 text-xs text-gray-700 sm:text-sm"
           >
             <span className="mt-0.5 text-base" aria-hidden="true">
               {item.icon}

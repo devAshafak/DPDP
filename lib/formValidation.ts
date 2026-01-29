@@ -46,8 +46,9 @@ export function validateOrgType(orgType: string): string | null {
 
 export function validateOrganizationName(orgName: string): string | null {
   const trimmed = orgName.trim();
-  if (trimmed && trimmed.length < 2) {
-    return "Organization name must be at least 2 characters if provided.";
+  if (!trimmed) return "Organization name is required.";
+  if (trimmed.length < 2) {
+    return "Organization name must be at least 2 characters.";
   }
   return null;
 }

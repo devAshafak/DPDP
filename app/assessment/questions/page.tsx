@@ -190,16 +190,16 @@ export default function AssessmentQuestionsPage() {
       : "Loading questions...";
 
   return (
-    <main className="min-h-screen bg-[#FAF7F2] text-gray-900">
+    <main className="main-bg min-h-screen text-white">
       {/* Sticky header */}
-      <header className="sticky top-0 z-20 border-b border-slate-200 bg-white/95 backdrop-blur-sm">
+      <header className="main-bg sticky top-0 z-20 border-b border-white/10 backdrop-blur-sm">
         <div className="mx-auto flex max-w-4xl items-center justify-between px-4 py-3 sm:px-6">
           <div>
-            <p className="text-xs font-semibold uppercase tracking-wide text-blue-700">
+            <p className="text-xs font-semibold uppercase tracking-wide text-white">
               DPDP Readiness Assessment
             </p>
           </div>
-          <p className="text-[11px] font-medium text-gray-600 sm:text-xs">
+          <p className="text-[11px] font-medium text-white/80 sm:text-xs">
             {stepLabel}
           </p>
         </div>
