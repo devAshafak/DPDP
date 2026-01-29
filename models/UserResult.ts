@@ -12,13 +12,32 @@ export type UserResultDoc = {
   updatedAt: Date;
 };
 
+const SectionScoreSchema = new Schema<SectionScore>(
+  {
+    sectionName: { type: String, required: true },
+    maxScore: { type: Number, required: true },
+    obtainedScore: { type: Number, required: true },
+    percentage: { type: Number, required: true },
+    maturityLevel: {
+      type: String,
+      required: true,
+      enum: ["Strong", "Moderate", "Weak"],
+    },
+  },
+  { _id: false }
+);
+
 const UserResultSchema = new Schema<UserResultDoc>(
   {
     userId: { type: String, required: true, index: true, unique: true },
     totalScore: { type: Number, required: true },
     maxScore: { type: Number, required: true },
     riskLevel: { type: String, required: true, enum: ["High", "Medium", "Good"] },
-    sectionBreakdown: { type: Array, required: true, default: [] },
+    sectionBreakdown: {
+      type: [SectionScoreSchema],
+      required: true,
+      default: () => [] as SectionScore[],
+    },
     createdAt: { type: Date, required: true, default: Date.now },
     updatedAt: { type: Date, required: true, default: Date.now },
   },

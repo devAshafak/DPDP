@@ -1,8 +1,12 @@
 import { NextRequest, NextResponse } from "next/server";
+import mongoose from "mongoose";
 
 import { connectMongo } from "@/lib/mongoose";
-import { Questionnaire } from "@/models/Questionnaire";
-import { Question } from "@/models/Question";
+import {
+  Questionnaire,
+  type QuestionnaireDoc,
+} from "@/models/Questionnaire";
+import { Question, type QuestionDoc } from "@/models/Question";
 import { QuestionOption } from "@/models/QuestionOption";
 
 type RouteContext = {
@@ -35,7 +39,9 @@ export async function POST(req: NextRequest, context: RouteContext) {
       );
     }
 
-    const questionnaire = await Questionnaire.findById(questionnaireId).lean();
+    const questionnaire = (await Questionnaire.findById(
+      questionnaireId
+    ).lean()) as (QuestionnaireDoc & { _id: mongoose.Types.ObjectId }) | null;
     if (!questionnaire) {
       return NextResponse.json(
         { error: "Questionnaire not found" },
@@ -44,11 +50,11 @@ export async function POST(req: NextRequest, context: RouteContext) {
     }
 
     const session = await Question.startSession();
-    let createdQuestion;
+    let createdQuestion: mongoose.HydratedDocument<QuestionDoc> | undefined;
     let createdOptions: any[] = [];
 
     await session.withTransaction(async () => {
-      createdQuestion = await Question.create(
+      const [doc] = await Question.create(
         [
           {
             questionnaireId: questionnaire._id,
@@ -61,12 +67,13 @@ export async function POST(req: NextRequest, context: RouteContext) {
           },
         ],
         { session }
-      ).then((docs) => docs[0]);
+      );
+      createdQuestion = doc;
 
       if (Array.isArray(options) && options.length > 0) {
         createdOptions = await QuestionOption.insertMany(
           options.map((opt: any) => ({
-            questionId: createdQuestion._id,
+            questionId: createdQuestion!._id,
             optionKey: opt.optionKey,
             optionText: opt.optionText,
             score: opt.score,
@@ -75,6 +82,13 @@ export async function POST(req: NextRequest, context: RouteContext) {
         );
       }
     });
+
+    if (!createdQuestion) {
+      return NextResponse.json(
+        { error: "Failed to create question" },
+        { status: 500 }
+      );
+    }
 
     return NextResponse.json(
       {

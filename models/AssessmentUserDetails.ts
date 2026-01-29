@@ -12,6 +12,7 @@ export type AssessmentUserDetailsDoc = {
   userId: string;
   fullName: string;
   workEmail: string;
+  organizationName?: string;
   organizationType: OrganizationType;
   completedAt: Date;
   createdAt: Date;
@@ -38,6 +39,12 @@ const AssessmentUserDetailsSchema = new Schema<AssessmentUserDetailsDoc>(
       trim: true,
       lowercase: true,
       maxlength: 254,
+    },
+    organizationName: {
+      type: String,
+      required: false,
+      trim: true,
+      maxlength: 200,
     },
     organizationType: {
       type: String,

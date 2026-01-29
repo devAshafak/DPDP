@@ -1,7 +1,11 @@
 import { NextRequest, NextResponse } from "next/server";
+import mongoose from "mongoose";
 
 import { connectMongo } from "@/lib/mongoose";
-import { Questionnaire } from "@/models/Questionnaire";
+import {
+  Questionnaire,
+  type QuestionnaireDoc,
+} from "@/models/Questionnaire";
 import { Question } from "@/models/Question";
 import { QuestionOption } from "@/models/QuestionOption";
 
@@ -18,10 +22,12 @@ export async function GET(_req: NextRequest, context: RouteContext) {
 
     const { code } = await context.params;
 
-    const questionnaire = await Questionnaire.findOne({
+    const questionnaire = (await Questionnaire.findOne({
       code,
       isActive: true,
-    }).lean();
+    }).lean()) as (QuestionnaireDoc & {
+      _id: mongoose.Types.ObjectId;
+    }) | null;
 
     if (!questionnaire) {
       return NextResponse.json(

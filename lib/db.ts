@@ -1,4 +1,4 @@
-import { MongoClient, Db, Collection } from "mongodb";
+import { MongoClient, Db, Collection, Document } from "mongodb";
 
 // You can also move this URI to an env var: process.env.MONGODB_URI
 const uri = process.env.MONGODB_URI || "mongodb://localhost:27017/dpdp";
@@ -33,7 +33,7 @@ export async function getDb(dbName = "dpdp"): Promise<Db> {
   return client.db(dbName);
 }
 
-export async function getCollection<T = unknown>(
+export async function getCollection<T extends Document = Document>(
   name: string,
   dbName = "dpdp"
 ): Promise<Collection<T>> {
