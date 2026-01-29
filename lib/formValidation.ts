@@ -10,6 +10,7 @@ export type ValidationResult = {
   nameError: string | null;
   emailError: string | null;
   orgTypeError: string | null;
+  organizationNameError: string | null;
 };
 
 export function validateName(name: string): string | null {
@@ -43,15 +44,25 @@ export function validateOrgType(orgType: string): string | null {
   return null;
 }
 
+export function validateOrganizationName(orgName: string): string | null {
+  const trimmed = orgName.trim();
+  if (trimmed && trimmed.length < 2) {
+    return "Organization name must be at least 2 characters if provided.";
+  }
+  return null;
+}
+
 export function isFormValid(values: {
   name: string;
   email: string;
   organizationType: string;
+  organizationName?: string;
 }): boolean {
   return (
     validateName(values.name) === null &&
     validateWorkEmail(values.email) === null &&
-    validateOrgType(values.organizationType) === null
+    validateOrgType(values.organizationType) === null &&
+    validateOrganizationName(values.organizationName || "") === null
   );
 }
 

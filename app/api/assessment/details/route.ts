@@ -2,11 +2,13 @@ import { NextRequest, NextResponse } from "next/server";
 
 import { connectMongo } from "@/lib/mongoose";
 import { AssessmentUserDetails } from "@/models/AssessmentUserDetails";
+import { sendAssessmentDetailsEmail } from "@/lib/email";
 
 type DetailsPayload = {
   userId: string;
   fullName: string;
   workEmail: string;
+  organizationName?: string;
   organizationType: string;
 };
 
@@ -23,7 +25,7 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    const { userId, fullName, workEmail, organizationType } = body;
+    const { userId, fullName, workEmail, organizationName, organizationType } = body;
 
     await AssessmentUserDetails.updateOne(
       { userId },
@@ -31,12 +33,23 @@ export async function POST(req: NextRequest) {
         $set: {
           fullName,
           workEmail,
+          organizationName: organizationName || undefined,
           organizationType,
           completedAt: new Date(),
           createdAt: new Date(),
         },
       },
       { upsert: true }
+    );
+
+    // Send email notification in background (fire-and-forget)
+    sendAssessmentDetailsEmail({
+      fullName,
+      workEmail,
+      organizationName: organizationName || undefined,
+      organizationType,
+    }).catch((error) =>
+      console.error("Failed to send assessment details email", error)
     );
 
     return NextResponse.json({ ok: true }, { status: 201 });

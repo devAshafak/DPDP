@@ -5,6 +5,7 @@ import {
   isFormValid,
   validateName,
   validateOrgType,
+  validateOrganizationName,
   validateWorkEmail,
   type ValidationResult,
 } from "../lib/formValidation";
@@ -13,6 +14,7 @@ export type AssessmentDetailsPayload = {
   name: string;
   email: string;
   organizationType: string;
+  organizationName?: string;
 };
 
 type AssessmentDetailsFormProps = {
@@ -26,12 +28,14 @@ export default function AssessmentDetailsForm({
     name: "",
     email: "",
     organizationType: "",
+    organizationName: "",
   });
 
   const [errors, setErrors] = useState<ValidationResult>({
     nameError: null,
     emailError: null,
     orgTypeError: null,
+    organizationNameError: null,
   });
 
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -52,6 +56,10 @@ export default function AssessmentDetailsForm({
         next.emailError = validateWorkEmail(values.email);
       } else if (field === "organizationType") {
         next.orgTypeError = validateOrgType(values.organizationType);
+      } else if (field === "organizationName") {
+        next.organizationNameError = validateOrganizationName(
+          values.organizationName || ""
+        );
       }
       return next;
     });
@@ -62,16 +70,20 @@ export default function AssessmentDetailsForm({
     const nameError = validateName(values.name);
     const emailError = validateWorkEmail(values.email);
     const orgTypeError = validateOrgType(values.organizationType);
+    const organizationNameError = validateOrganizationName(
+      values.organizationName || ""
+    );
 
     const nextErrors: ValidationResult = {
       nameError,
       emailError,
       orgTypeError,
+      organizationNameError,
     };
 
     setErrors(nextErrors);
 
-    if (nameError || emailError || orgTypeError) {
+    if (nameError || emailError || orgTypeError || organizationNameError) {
       return;
     }
 
@@ -87,6 +99,7 @@ export default function AssessmentDetailsForm({
     name: values.name,
     email: values.email,
     organizationType: values.organizationType,
+    organizationName: values.organizationName,
   });
 
   return (
@@ -151,6 +164,38 @@ export default function AssessmentDetailsForm({
             role="alert"
           >
             {errors.emailError}
+          </p>
+        )}
+      </div>
+
+      <div>
+        <label
+          htmlFor="organizationName"
+          className="block text-xs font-medium text-gray-700"
+        >
+          Organization Name <span className="font-normal text-gray-400">(optional)</span>
+        </label>
+        <input
+          id="organizationName"
+          name="organizationName"
+          type="text"
+          placeholder="e.g. Acme Corporation"
+          value={values.organizationName || ""}
+          onChange={(e) => handleChange("organizationName", e.target.value)}
+          onBlur={() => handleBlur("organizationName")}
+          className="mt-1 w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm text-gray-900 shadow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500"
+          aria-invalid={Boolean(errors.organizationNameError) || undefined}
+          aria-describedby={
+            errors.organizationNameError ? "organizationName-error" : undefined
+          }
+        />
+        {errors.organizationNameError && (
+          <p
+            id="organizationName-error"
+            className="mt-1 text-xs text-red-600"
+            role="alert"
+          >
+            {errors.organizationNameError}
           </p>
         )}
       </div>

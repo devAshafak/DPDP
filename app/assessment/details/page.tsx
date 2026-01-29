@@ -45,6 +45,7 @@ export default function AssessmentDetailsPage() {
       const record = {
         name: payload.name.trim(),
         email: payload.email.trim(),
+        organizationName: payload.organizationName?.trim(),
         organizationType: payload.organizationType,
         completedAt: Date.now(),
       };
@@ -60,6 +61,7 @@ export default function AssessmentDetailsPage() {
             userId,
             fullName: payload.name.trim(),
             workEmail: payload.email.trim(),
+            organizationName: payload.organizationName?.trim(),
             organizationType: payload.organizationType,
           }),
         });
@@ -99,7 +101,7 @@ export default function AssessmentDetailsPage() {
             Your details
           </h2>
           <p className="mt-1 text-xs text-gray-600">
-            All fields are required. You can provide high-level information and
+            Required fields are marked. You can provide high-level information and
             avoid sensitive data.
           </p>
 

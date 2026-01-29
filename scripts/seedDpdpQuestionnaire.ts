@@ -1,5 +1,9 @@
+import mongoose from "mongoose";
 import { connectMongo } from "@/lib/mongoose";
-import { Questionnaire } from "@/models/Questionnaire";
+import {
+  Questionnaire,
+  type QuestionnaireDoc,
+} from "@/models/Questionnaire";
 import { Question } from "@/models/Question";
 import { QuestionOption } from "@/models/QuestionOption";
 
@@ -8,7 +12,9 @@ async function run() {
 
   const code = "dpdp-readiness";
 
-  const existing = await Questionnaire.findOne({ code }).lean();
+  const existing = (await Questionnaire.findOne({ code }).lean()) as (QuestionnaireDoc & {
+    _id: mongoose.Types.ObjectId;
+  }) | null;
   if (existing) {
     console.log("Questionnaire already exists with id:", existing._id);
     process.exit(0);
