@@ -6,7 +6,7 @@ import { Question } from "@/models/Question";
 import { QuestionOption } from "@/models/QuestionOption";
 
 type RouteContext = {
-  params: { questionnaireId: string };
+  params: Promise<{ questionnaireId: string }>;
 };
 
 // POST /api/admin/questionnaires/:questionnaireId/questions
@@ -15,7 +15,7 @@ export async function POST(req: NextRequest, context: RouteContext) {
   try {
     await connectMongo();
 
-    const { questionnaireId } = context.params;
+    const { questionnaireId } = await context.params;
     const body = await req.json();
 
     const {
