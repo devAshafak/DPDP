@@ -1,5 +1,15 @@
 @import "tailwindcss";
 
+/* App-wide background (body) – applied on all pages */
+.app-bg {
+  background: linear-gradient(
+    90deg,
+    rgb(2, 0, 36) 0%,
+    rgba(0, 5, 41, 0.6) 60%,
+    rgba(0, 5, 41, 0.6) 100%
+  );
+}
+
 /* Main layout background */
 main.main-bg {
   background: linear-gradient(
@@ -12,35 +22,49 @@ main.main-bg {
 
 /* Start page: gradient base + background image (mobile-first, max 80% on lg) */
 .start-page-bg {
-  background-image: url("/dpdp-block-wrapper-bg.png"),
-    linear-gradient(
-      90deg,
-      rgb(2, 0, 36) 0%,
-      rgba(0, 5, 41, 0.6) 60%,
-      rgba(0, 5, 41, 0.6) 100%
-    );
-  /* Mobile: smaller, limited height so it stays in corner and doesn't overlap content */
-  background-size: 42% 28%, auto;
-  background-position: left top, 0 0;
-  background-repeat: no-repeat, no-repeat;
+  position: relative;
+  background: linear-gradient(
+    90deg,
+    rgb(2, 0, 36) 0%,
+    rgba(0, 5, 41, 0.6) 60%,
+    rgba(0, 5, 41, 0.6) 100%
+  );
+}
+
+.start-page-bg::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image: url("/dpdp-block-wrapper-bg.png");
+  background-position: left top;
+  background-repeat: no-repeat;
+  opacity: 0.3;
+  pointer-events: none;
+  /* Mobile: smaller, limited height so it stays in corner */
+  background-size: 42% 28%;
 }
 
 @media (min-width: 640px) {
-  .start-page-bg {
-    background-size: 55% auto, auto;
+  .start-page-bg::before {
+    background-size: 55% auto;
   }
 }
 
 @media (min-width: 768px) {
-  .start-page-bg {
-    background-size: 65% auto, auto;
+  .start-page-bg::before {
+    background-size: 65% auto;
   }
 }
 
 @media (min-width: 1024px) {
-  .start-page-bg {
-    background-size: 80% auto, auto;
+  .start-page-bg::before {
+    background-size: 80% auto;
   }
+}
+
+/* Main header "DPDP Readiness Assessment" font */
+.font-bebas-neue {
+  font-family: var(--font-bebas-neue), sans-serif;
 }
 
 /* Primary buttons and button-style labels */

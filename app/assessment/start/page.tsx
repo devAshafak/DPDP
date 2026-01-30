@@ -29,7 +29,7 @@ export default function DpdpAssessmentStartPage() {
             />
           </div>
           <div className="flex-1 text-center sm:text-right">
-            <h1 className="text-lg font-bold uppercase tracking-tight text-white sm:text-2xl md:text-3xl">
+            <h1 className="font-bebas-neue text-2xl uppercase tracking-tight text-white sm:text-3xl md:text-4xl">
               DPDP Readiness Assessment
             </h1>
             <p className="mt-1.5 text-xs leading-snug text-white/90 sm:mt-2 sm:text-sm md:text-base">

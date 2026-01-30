@@ -190,12 +190,19 @@ export default function AssessmentQuestionsPage() {
       : "Loading questions...";
 
   return (
-    <main className="main-bg min-h-screen text-white">
+    <main className="start-page-bg min-h-screen text-white">
       {/* Sticky header */}
-      <header className="main-bg sticky top-0 z-20 border-b border-white/10 backdrop-blur-sm">
+      <header className="start-page-bg sticky top-0 z-20 border-b border-white/10 backdrop-blur-sm">
         <div className="mx-auto flex max-w-4xl items-center justify-between px-4 py-3 sm:px-6">
-          <div>
-            <p className="text-xs font-semibold uppercase tracking-wide text-white">
+          <div className="flex items-center gap-3">
+            <img
+              src="/entersoftLogo.png"
+              alt="Entersoft"
+              className="h-7 w-auto sm:h-8"
+              width={100}
+              height={32}
+            />
+            <p className="font-bebas-neue text-base uppercase tracking-wide text-white sm:text-lg">
               DPDP Readiness Assessment
             </p>
           </div>

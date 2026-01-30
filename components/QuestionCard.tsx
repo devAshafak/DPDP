@@ -23,14 +23,14 @@ export default function QuestionCard({
           </div>
         )}
 
-        <div className="rounded-2xl bg-white p-6 shadow-sm ring-1 ring-slate-100 sm:p-7">
+        <div className="rounded-2xl bg-white/60 p-6 shadow-sm ring-1 ring-white/30 backdrop-blur-sm sm:p-7">
           <p className="text-xs font-semibold uppercase tracking-wide text-blue-700">
-            {question.sectionTitle}
+            {question.sectionTitle} 
           </p>
           <h2 className="mt-3 text-base font-semibold text-gray-900 sm:text-lg">
             {question.questionText}
           </h2>
-          <p className="mt-2 text-xs italic text-gray-500 sm:text-sm">
+          <p className="mt-2 text-xs italic text-gray-600 sm:text-sm">
             {question.signal}
           </p>
 

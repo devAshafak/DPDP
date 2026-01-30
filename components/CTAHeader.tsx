@@ -6,7 +6,7 @@ type CTAHeaderProps = {
 export default function CTAHeader({ title, subtitle }: CTAHeaderProps) {
   return (
     <header className="border-b border-slate-200 pb-4 text-center">
-      <p className="text-xs font-semibold uppercase tracking-wide text-blue-700">
+      <p className="font-bebas-neue text-lg uppercase tracking-wide text-blue-700 sm:text-xl">
         DPDP Readiness Assessment
       </p>
       <h1 className="mt-2 text-2xl font-semibold text-gray-900">{title}</h1>
