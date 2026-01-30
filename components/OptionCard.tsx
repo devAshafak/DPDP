@@ -28,10 +28,10 @@ export default function OptionCard({
       aria-checked={selected}
       onClick={onSelect}
       onKeyDown={handleKeyDown}
-      className={`flex w-full items-start gap-3 rounded-xl border px-4 py-3 text-left text-sm transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 focus-visible:ring-offset-[#FAF7F2] sm:px-5 sm:py-4 ${
+      className={`flex w-full items-start gap-3 rounded-xl border px-4 py-3 text-left text-sm transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 focus-visible:ring-offset-white/30 sm:px-5 sm:py-4 ${
         selected
-          ? "border-[#4A90E2] bg-blue-50/60"
-          : "border-slate-200 bg-white hover:border-blue-200"
+          ? "border-[#4A90E2] bg-blue-50/70"
+          : "border-white/40 bg-white/50 hover:border-blue-200/80 hover:bg-white/70"
       }`}
     >
       <span

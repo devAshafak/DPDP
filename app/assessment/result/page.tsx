@@ -72,7 +72,7 @@ export default function AssessmentResultPage() {
             />
           </div>
           <div className="flex-1 text-center sm:text-right border-b border-white/10 pb-4 sm:border-b-0 sm:pb-0">
-            <p className="text-xs font-semibold uppercase tracking-wide text-white">
+            <p className="font-bebas-neue text-base uppercase tracking-wide text-white sm:text-lg">
               DPDP Readiness Assessment
             </p>
             <h1 className="mt-2 text-xl font-semibold text-white sm:text-2xl md:text-3xl">

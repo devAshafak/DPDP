@@ -76,10 +76,19 @@ export default function AssessmentDetailsPage() {
   };
 
   return (
-    <main className="main-bg min-h-screen px-6 py-10 text-white sm:py-12">
+    <main className="start-page-bg min-h-screen px-6 py-10 text-white sm:py-12">
       <div className="mx-auto max-w-3xl">
         <div className="text-center">
-          <p className="text-xs font-semibold uppercase tracking-wide text-white">
+          <div className="flex justify-center">
+            <img
+              src="/entersoftLogo.png"
+              alt="Entersoft"
+              className="h-8 w-auto sm:h-9 md:h-10"
+              width={120}
+              height={40}
+            />
+          </div>
+          <p className="font-bebas-neue mt-3 text-lg uppercase tracking-wide text-white sm:text-xl">
             DPDP Readiness Assessment
           </p>
           <h1 className="mt-2 text-2xl font-semibold text-white">
@@ -97,7 +106,7 @@ export default function AssessmentDetailsPage() {
           </p>
         </TrustNotice>
 
-        <section className="mt-6 rounded-2xl bg-white p-6 shadow-sm ring-1 ring-slate-100 sm:p-7">
+        <section className="mt-6 rounded-2xl bg-white/60 p-6 shadow-sm ring-1 ring-white/30 backdrop-blur-sm sm:p-7">
           <h2 className="text-sm font-semibold text-gray-900">
             Your details
           </h2>
