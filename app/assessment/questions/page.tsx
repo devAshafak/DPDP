@@ -193,22 +193,24 @@ export default function AssessmentQuestionsPage() {
     <main className="start-page-bg min-h-screen text-white">
       {/* Sticky header */}
       <header className="start-page-bg sticky top-0 z-20 border-b border-white/10 backdrop-blur-sm">
-        <div className="mx-auto flex max-w-4xl items-center justify-between px-4 py-3 sm:px-6">
-          <div className="flex items-center gap-3">
-            <img
-              src="/entersoftLogo.png"
-              alt="Entersoft"
-              className="h-7 w-auto sm:h-8"
-              width={100}
-              height={32}
-            />
-            <p className="font-bebas-neue text-base uppercase tracking-wide text-white sm:text-lg">
-              DPDP Readiness Assessment
+        <div className="mx-auto max-w-4xl px-4 py-3 sm:px-6">
+          <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between sm:gap-4">
+            <div className="flex min-w-0 shrink-0 items-center gap-2 sm:gap-3">
+              <img
+                src="/entersoftLogo.png"
+                alt="Entersoft"
+                className="h-6 w-auto shrink-0 sm:h-8"
+                width={100}
+                height={32}
+              />
+              <p className="font-bebas-neue min-w-0 truncate text-sm uppercase tracking-wide text-white sm:truncate-none sm:text-lg">
+                DPDP Readiness Assessment
+              </p>
+            </div>
+            <p className="min-w-0 text-[11px] font-medium leading-snug text-white/80 sm:text-xs sm:leading-normal sm:text-right">
+              {stepLabel}
             </p>
           </div>
-          <p className="text-[11px] font-medium text-white/80 sm:text-xs">
-            {stepLabel}
-          </p>
         </div>
         <ProgressBar
           answeredCount={answeredCount}
